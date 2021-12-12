@@ -1,0 +1,7 @@
+Anything
+
+
+Bash scripts for creating a Max Package template as well as Readme file for MR.Toolbox..
+
+
+Old projects and patches that I don't use anymore for various reasons...

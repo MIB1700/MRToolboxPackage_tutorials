@@ -1,0 +1,126 @@
+#! /usr/bin/env bash
+# https://docs.cycling74.com/max8/vignettes/packages
+#script for creating the MAX package structure in the pwd
+
+# mkdir clippings
+
+            # mkdir clippings
+          	# echo Patchers to list in the "Paste From..." contextual menu when patching >> clippings.txt
+
+            mkdir code
+          	echo Gen patchers >> ./code/GenPatchers.txt
+
+            # mkdir collections
+          	# echo Collections to list in the File Browser that are associated with the package >> ./collections/collections.txt
+
+            # mkdir default-definitions
+          	# echo Definition info for Object Defaults support in UI externals >> default-definitions.txt
+
+            # mkdir default-settings
+          	# echo Saved color schemes for Object Defaults >> ./default-settings/default-settings.txt
+
+            # mkdir devices
+          	# echo Max for Live devices (AMXDs) >> ./devices/devices.txt
+
+            # mkdir docs
+          	# echo Reference pages and Vignettes to be accessible from the Documentation Window >> ./docs/docs.txt
+
+            # mkdir examples
+          	# echo Example patchers and supporting material >> ./examples/examples.txt
+
+            # mkdir extensions
+          	# echo Special external objects loaded on Max launch >> ./extensions/extensions.txt
+
+            mkdir externals
+          	echo External objects >> ./externals/externals.txt
+
+            # mkdir extras
+          	# echo Patchers to be listed in the "Extras" menu >> ./extras/extras.txt
+
+            # mkdir fonts
+          	# echo Custom fonts available to Max when the Package is present >> ./fonts/fonts.txt
+
+            mkdir help
+          	echo Help patchers and supporting material >> ./help/help.txt
+
+            cp /Users/martinritter/Documents/Development/Scripts/bash/media/MRicon.png ./icon.png
+
+            #   icon.png
+            # A PNG graphic file (500x500px) for display in the Package Manager
+
+
+            # mkdir init
+          	# echo Text files interpreted by Max at launch >> ./init/init.txt
+
+            # mkdir interfaces
+          	# echo Supporting files for objects to display in the top patcher toolbar and other Max integration. >> ./interfaces/interfaces.txt
+
+            # mkdir java-classes
+          	# echo Compiled Java classes for use in mxj/mxj~. Place .jar folders in a 'lib' subfolder. >> ./java-classes/java-classes.txt
+
+            # mkdir java-doc
+          	# echo Documentation for Java classes >> ./java-doc/java-doc.txt
+
+            mkdir javascript
+          	echo Javascript files to be used by js >> ./javascript/javascript.txt
+
+            mkdir jsextensions
+          	echo Extensions to JS implemented as special externals or js files >> ./jsextensions/jsextensions.txt
+
+            mkdir jsui
+          	echo Javascript files to be used by jsui, and listed in the contextual menu for jsui >> ./jsui/jsui.txt
+
+
+            #     license.txt
+
+            #   or
+
+            #     license.md
+
+
+            # Terms of use / redistribution of your package (plain text or Markdown permitted)
+
+
+            mkdir media
+          	echo Media files to be included in the searchpath >> ./media/media.txt
+
+            mkdir misc
+          	echo Anything >> ./misc/misc.txt
+
+            mkdir patchers
+          	echo Patchers or abstractions to be included in the searchpath >> ./patchers/patchers.txt
+
+            # mkdir projects
+          	# echo Projects to be included in the searchpath. Note that only the project file will be added to the searchpath. >> ./projects/projects.txt
+
+            # mkdir object-icons
+          	# echo An SVG-format object icon for a particular Max object (named <objectname>.svg), used in the Object Browser >> ./object-icons/object-icons.txt
+
+            # mkdir object-prototypes
+          	# echo Object Prototypes will be listed in the context menu for a selected UI object >> ./object-prototypes/object-prototypes.txt
+
+
+
+            #     readme.txt
+
+            #   or
+
+            #     readme.md
+
+
+            # Information about your package (plain text or
+            # Markdown
+            # permitted)
+
+
+            mkdir snippets
+          	echo Snippets associated with this package >> ./snippets/snippets.txt
+
+            # mkdir source
+          	# echo Source code for external objects, ignored by Max >> ./source/source.txt
+
+            # mkdir support
+          	# echo Special location for DLL or dylib dependencies of external objects. Added to the DLL search path on Windows. >> ./support/support.txt
+
+            # mkdir templates
+          	# echo Patchers to be listed in the "File > New From Template" menu >> ./templates/templates.txt

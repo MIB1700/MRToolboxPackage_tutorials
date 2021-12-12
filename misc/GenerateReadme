@@ -1,0 +1,14 @@
+#! /opt/local/bin/bash
+#-x means print commands as they are executed
+set -x
+
+#get tree view of MRtoolbox directory and write it to the README.md file
+
+echo -e '# MRToolbox \n\n A growing collection of Max tools... \n\n ```' > ../README.md
+
+tree ../ >> ../README.md
+
+echo '```' >> ../README.md
+
+
+echo -e '\n\n\nThis is a constant work in progress... so things might change and/or break at any point...' >> ../README.md
