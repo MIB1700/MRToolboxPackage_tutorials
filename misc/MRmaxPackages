@@ -1,126 +1,360 @@
-#! /usr/bin/env bash
+#!/bin/zsh
+
 # https://docs.cycling74.com/max8/vignettes/packages
-#script for creating the MAX package structure in the pwd
+#script for creating the MAX package structure in the pwd or Max Packages folder
 
-# mkdir clippings
+set -Eeuo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
 
-            # mkdir clippings
-          	# echo Patchers to list in the "Paste From..." contextual menu when patching >> clippings.txt
+#cd to script directory... could be useful...
+# script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
-            mkdir code
-          	echo Gen patchers >> ./code/GenPatchers.txt
+usage() {
+  print "
+Usage: $(basename "${(%):-%x}") [-a] [-t] [-h] [-v] [-g] [-m] [-i] path to icon [-n] name
 
-            # mkdir collections
-          	# echo Collections to list in the File Browser that are associated with the package >> ./collections/collections.txt
+Packages are a convenient means of bundling objects, media, patchers, and resources for distribution.
 
-            # mkdir default-definitions
-          	# echo Definition info for Object Defaults support in UI externals >> default-definitions.txt
+A package is simply a folder adhering to a prescribed structure and placed in the 'packages' folder. Folders adhering to this structure can be accessed by Max to integrate seamlessly at launch time.
 
-            # mkdir default-settings
-          	# echo Saved color schemes for Object Defaults >> ./default-settings/default-settings.txt
+To install a package, simply copy it to your 'packages' folder. To uninstall a package, simply remove it from your 'packages' folder.
 
-            # mkdir devices
-          	# echo Max for Live devices (AMXDs) >> ./devices/devices.txt
+Available options:
 
-            # mkdir docs
-          	# echo Reference pages and Vignettes to be accessible from the Documentation Window >> ./docs/docs.txt
+-h, --help        Print this help and exit
+-v, --verbose     Print script debug info
+-a, --all         ALL possible folders and files
+-t, --tiniest     bare minimum of folders, no files
+-i, --icon        Path to the icon to copy into the package
+-g, --git         init git for package, download default gitignore (NOT by default)
+-m, --move        move the folder into the Max package folder (NOT by default)
+-n, --name        name of the package (required)
 
-            # mkdir examples
-          	# echo Example patchers and supporting material >> ./examples/examples.txt
+"
+  exit 0
+}
 
-            # mkdir extensions
-          	# echo Special external objects loaded on Max launch >> ./extensions/extensions.txt
+cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
+  # script cleanup here
 
-            mkdir externals
-          	echo External objects >> ./externals/externals.txt
+}
 
-            # mkdir extras
-          	# echo Patchers to be listed in the "Extras" menu >> ./extras/extras.txt
+setup_colours() {
+    #add   && [[ -z "${NO_COLOR-}" ]]  to the if statement if using the NO_COLOR param
+  if [[ -t 2 ]] && [[ "${TERM-}" != "dumb" ]]; then
+     #-t 2 == stderr
+     NOFORMAT='\033[0m'
+	   CLF='\033[0m'
+     RED='\033[0;31m'
+     GREEN='\033[0;32m'
+     ORANGE='\033[0;33m'
+     BLUE='\033[0;34m'
+     PURPLE='\033[0;35m'
+     CYAN='\033[0;36m'
+     YELLOW='\033[1;33m'
+     BOLD="\033[1m"
+	   UL="\e[4m"
 
-            # mkdir fonts
-          	# echo Custom fonts available to Max when the Package is present >> ./fonts/fonts.txt
+  else
+    # shellcheck disable=SC2034
+     NOFORMAT=''
+     RED=''
+     GREEN=''
+     ORANGE=''
+     BLUE=''
+     PURPLE=''
+     CYAN=''
+     YELLOW=''
+     BOLD=''
+     CLF=''
+     UL=''
+  fi
+}
 
-            mkdir help
-          	echo Help patchers and supporting material >> ./help/help.txt
+errmsg() {
+  echo >&2 -e "${1-}"
+}
 
-            cp /Users/martinritter/Documents/Development/Scripts/bash/media/MRicon.png ./icon.png
+die() {
+  local errmsg=$1
+  local code=${2-1} # default exit status 1
+  errmsg "${RED}$errmsg${CLF}"
+  exit "$code"
+}
 
-            #   icon.png
-            # A PNG graphic file (500x500px) for display in the Package Manager
+parse_params() {
+  # default values of variables set from params
+  all=0
+  minimum=0
+  default=1
+  iconPath=''
+  initGit=0
+  moveTo=0
+  pName=''
 
+  while :; do
+    case "${1-}" in
+    -h | --help) usage ;;
+    --no-color) NO_COLOR=1 ;;
+    -a | --all) all=1
+                minimum=0
+                default=0 ;;
+    -t | --tiniest) minimum=1
+                    all=0
+                    default=0 ;;
+    -g | --git) initGit=1 ;;
+    -m | --move) moveTo=1 ;;
+    -n | --name) pName="${2-}"
+                shift ;;
+    -i | --icon)
+                iconPath="${2-}"
+                shift ;;
+    -?*) die "Unknown option: $1" ;;
+    *) break ;;
+    esac
+    shift
+  done
 
-            # mkdir init
-          	# echo Text files interpreted by Max at launch >> ./init/init.txt
+    # check required params and arguments
+  [[ -z "${pName-}" ]] && die "Missing required parameter: Package Name -n --name"
 
-            # mkdir interfaces
-          	# echo Supporting files for objects to display in the top patcher toolbar and other Max integration. >> ./interfaces/interfaces.txt
-
-            # mkdir java-classes
-          	# echo Compiled Java classes for use in mxj/mxj~. Place .jar folders in a 'lib' subfolder. >> ./java-classes/java-classes.txt
-
-            # mkdir java-doc
-          	# echo Documentation for Java classes >> ./java-doc/java-doc.txt
-
-            mkdir javascript
-          	echo Javascript files to be used by js >> ./javascript/javascript.txt
-
-            mkdir jsextensions
-          	echo Extensions to JS implemented as special externals or js files >> ./jsextensions/jsextensions.txt
-
-            mkdir jsui
-          	echo Javascript files to be used by jsui, and listed in the contextual menu for jsui >> ./jsui/jsui.txt
-
-
-            #     license.txt
-
-            #   or
-
-            #     license.md
-
-
-            # Terms of use / redistribution of your package (plain text or Markdown permitted)
-
-
-            mkdir media
-          	echo Media files to be included in the searchpath >> ./media/media.txt
-
-            mkdir misc
-          	echo Anything >> ./misc/misc.txt
-
-            mkdir patchers
-          	echo Patchers or abstractions to be included in the searchpath >> ./patchers/patchers.txt
-
-            # mkdir projects
-          	# echo Projects to be included in the searchpath. Note that only the project file will be added to the searchpath. >> ./projects/projects.txt
-
-            # mkdir object-icons
-          	# echo An SVG-format object icon for a particular Max object (named <objectname>.svg), used in the Object Browser >> ./object-icons/object-icons.txt
-
-            # mkdir object-prototypes
-          	# echo Object Prototypes will be listed in the context menu for a selected UI object >> ./object-prototypes/object-prototypes.txt
-
-
-
-            #     readme.txt
-
-            #   or
-
-            #     readme.md
+  return 0
+}
 
 
-            # Information about your package (plain text or
-            # Markdown
-            # permitted)
+chooseFolderLayout()
+{
+  cd "${PACKAGES_PATH}${pName}"
 
+  if [[ $default == 1 ]];then
+    createDefault
+  elif [[ $minimum == 1 ]]; then
+    createMinimum
+  elif [[ $all == 1 ]]; then
+    createAll
+  fi
+}
 
-            mkdir snippets
-          	echo Snippets associated with this package >> ./snippets/snippets.txt
+createDefault()
+{
+  mkdirCheck code
+  echo 'Gen patchers' >> ./code/GenPatchers.txt
 
-            # mkdir source
-          	# echo Source code for external objects, ignored by Max >> ./source/source.txt
+  mkdirCheck externals
+  echo 'External objects' >> ./externals/externals.txt
 
-            # mkdir support
-          	# echo Special location for DLL or dylib dependencies of external objects. Added to the DLL search path on Windows. >> ./support/support.txt
+  mkdirCheck extras
+  echo 'Patchers to be listed in the "Extras" menu' >> ./extras/extras.txt
 
-            # mkdir templates
-          	# echo Patchers to be listed in the "File > New From Template" menu >> ./templates/templates.txt
+  mkdirCheck help
+  echo 'Help patchers and supporting material' >> ./help/help.txt
+
+  getIconImage
+  # A PNG graphic file (500x500px) for display in the Package Manager
+
+  mkdirCheck jsextensions
+  echo 'Extensions to JS implemented as special externals or js files' >> ./jsextensions/jsextensions.txt
+
+  mkdirCheck patchers
+  echo 'Patchers or abstractions to be included in the searchpath' >> ./patchers/patchers.txt
+
+  touch readme.md
+}
+
+createMinimum()
+{
+  mkdirCheck help
+  echo 'Help patchers and supporting material' >> ./help/help.txt
+
+  mkdirCheck patchers
+  echo 'Patchers or abstractions to be included in the searchpath' >> ./patchers/patchers.txt
+
+  touch readme.md
+}
+
+createAll()
+{
+  mkdirCheck clippings
+  echo 'Patchers to list in the "Paste From..." contextual menu when patching' >> ./clippings/clippings.txt
+
+  mkdirCheck code
+  echo 'Gen patchers' >> ./code/GenPatchers.txt
+
+  mkdirCheck collections
+  echo 'Collections to list in the File Browser that are associated with the package' >> ./collections/collections.txt
+
+  mkdirCheck default-definitions
+  echo 'Definition info for Object Defaults support in UI externals' >> ./default-definitions/default-definitions.txt
+
+  mkdirCheck default-settings
+  echo 'Saved color schemes for Object Defaults' >> ./default-settings/default-settings.txt
+
+  mkdirCheck devices
+  echo 'Max for Live devices (AMXDs)' >> ./devices/devices.txt
+
+  mkdirCheck docs
+  echo 'Reference pages and Vignettes to be accessible from the Documentation Window' >> ./docs/docs.txt
+
+  mkdirCheck examples
+  echo 'Example patchers and supporting material' >> ./examples/examples.txt
+
+  mkdirCheck extensions
+  echo 'Special external objects loaded on Max launch' >> ./extensions/extensions.txt
+
+  mkdirCheck externals
+  echo 'External objects' >> ./externals/externals.txt
+
+  mkdirCheck extras
+  echo 'Patchers to be listed in the "Extras" menu' >> ./extras/extras.txt
+
+  mkdirCheck fonts
+  echo 'Custom fonts available to Max when the Package is present' >> ./fonts/fonts.txt
+
+  mkdirCheck help
+  echo 'Help patchers and supporting material' >> ./help/help.txt
+
+  getIconImage
+  # A PNG graphic file (500x500px) for display in the Package Manager
+
+  mkdirCheck init
+  echo 'Text files interpreted by Max at launch' >> ./init/init.txt
+
+  mkdirCheck interfaces
+  echo 'Supporting files for objects to display in the top patcher toolbar and other Max integration' >> ./interfaces/interfaces.txt
+
+  mkdirCheck java-classes
+  echo 'Compiled Java classes for use in mxj/mxj~. Place .jar folders in a 'lib' subfolder' >> ./java-classes/java-classes.txt
+
+  mkdirCheck java-doc
+  echo 'Documentation for Java classes' >> ./java-doc/java-doc.txt
+
+  mkdirCheck javascript
+  echo 'Javascript files to be used by js' >> ./javascript/javascript.txt
+
+  mkdirCheck jsextensions
+  echo 'Extensions to JS implemented as special externals or js files' >> ./jsextensions/jsextensions.txt
+
+  mkdirCheck jsui
+  echo 'Javascript files to be used by jsui, and listed in the contextual menu for jsui' >> ./jsui/jsui.txt
+
+  touch license.md
+  echo 'Terms of use / redistribution of your package (plain text or Markdown permitted)' >> license.md
+
+  mkdirCheck media
+  echo 'Media files to be included in the searchpath' >> ./media/media.txt
+
+  mkdirCheck misc
+  echo Anything >> ./misc/misc.txt
+
+  mkdirCheck patchers
+  echo 'Patchers or abstractions to be included in the searchpath' >> ./patchers/patchers.txt
+
+  mkdirCheck projects
+  echo 'Projects to be included in the searchpath. Note that only the project file will be added to the searchpath' >> ./projects/projects.txt
+
+  mkdirCheck object-icons
+  echo 'An SVG-format object icon for a particular Max object (named <objectname>.svg), used in the Object Browser' >> ./object-icons/object-icons.txt
+
+  mkdirCheck object-prototypes
+  echo 'Object Prototypes will be listed in the context menu for a selected UI object' >> ./object-prototypes/object-prototypes.txt
+
+  touch readme.md
+  echo "Information about your package (plain text or Markdown permitted)" >> readme.md
+
+  mkdirCheck snippets
+  echo 'Snippets associated with this package' >> ./snippets/snippets.txt
+
+  mkdirCheck source
+  echo 'Source code for external objects, ignored by Max' >> ./source/source.txt
+
+  mkdirCheck support
+  echo 'Special location for DLL or dylib dependencies of external objects. Added to the DLL search path on Windows' >> ./support/support.txt
+
+  mkdirCheck templates
+  echo 'Patchers to be listed in the "File > New From Template" menu' >> ./templates/templates.txt
+
+  touch package-info.json
+  echo 'Copy a package-info.json from an existing package and modify the content' >> package-info.json
+}
+
+mkdirCheck() {
+
+  if ! mkdir "$1"; then
+
+    die "$1 could not be created." 1
+  fi
+}
+
+createPackage()
+{
+  PACKAGES_PATH=''
+
+  if [[ "$moveTo" == 1 ]]; then
+
+    PACKAGES_PATH=~"/Documents/Max 8/Packages/"
+  fi
+
+  mkdirCheck "${PACKAGES_PATH}${pName}"
+}
+
+#https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive
+getGitIgnore()
+{
+  if curl --fail -o ".gitignore" https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive; then
+
+      print "\n${GREEN}.gitignore succesfully downloaded!${NOFORMAT}\n"
+  else
+      print "\n${RED}Couldn't download .gitignore... exiting${NOFORMAT}\n"
+      print "manually download and add file to package:\n ${BOLD}https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive${CLF}"
+      print "\n manually create a git repository:"
+      print "${BOLD} \tgit init .
+    \tgit add --all
+    \tgit commit -m \"initial commit\"${CLF}\n"
+
+      open . #open the folder but don't git init
+
+      exit 1
+  fi
+}
+
+gitIt()
+{
+  if [[ "$initGit" == 1 ]]; then
+
+    getGitIgnore
+
+    git init .
+    git add --all
+    git commit -m "initial commit"
+
+  fi
+}
+
+getIconImage()
+{
+  if [[ ! -z "$iconPath" ]]; then
+
+    if [[ ${iconPath##*.} == "png" ]]; then
+
+      cp -v "$iconPath" .
+      mv -v ${iconPath##*/} icon.png
+    else
+
+      print "\n${RED} ICON needs to be of type: PNG${CLF}\n"
+    fi
+  fi
+}
+
+#init the script
+setup_colours
+parse_params "$@"
+
+#run the script
+createPackage
+chooseFolderLayout
+gitIt
+
+open .
+
+exit 0
