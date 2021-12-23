@@ -301,12 +301,13 @@ createPackage()
 #https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive
 getGitIgnore()
 {
-  if curl --fail -o ".gitignore" https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive; then
+  link='https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive'
+  if curl --fail -o ".gitignore" "$link"; then
 
       print "\n${GREEN}.gitignore succesfully downloaded!${NOFORMAT}\n"
   else
       print "\n${RED}Couldn't download .gitignore... exiting${NOFORMAT}\n"
-      print "manually download and add file to package:\n ${BOLD}https://www.toptal.com/developers/gitignore/api/osx,audio,video,compressedarchive${CLF}"
+      print "manually download and add file to package:\n ${BOLD}${link}${CLF}"
       print "\n manually create a git repository:"
       print "${BOLD} \tgit init .
     \tgit add --all

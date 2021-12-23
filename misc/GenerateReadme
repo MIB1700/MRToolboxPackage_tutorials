@@ -1,8 +1,13 @@
 #! /opt/local/bin/bash
 #-x means print commands as they are executed
-set -x
-
 #get tree view of MRtoolbox directory and write it to the README.md file
+
+if ! command -v tree &> /dev/null
+then
+    echo "command 'tree' not found... install it."
+
+    exit 1
+fi
 
 echo -e '# MRToolbox \n\n A growing collection of Max tools... \n\n ```' > ../README.md
 
