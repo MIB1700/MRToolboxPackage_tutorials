@@ -24,7 +24,7 @@ Available options:
 -h, --help        Print this help and exit
 -v, --verbose     Print script debug info
 -a, --all         ALL possible folders and files
--t, --tiniest     bare minimum of folders, no files
+-t, --tiny     bare minimum of folders, no files
 -i, --icon        Path to the icon to copy into the package
 -g, --git         init git for package, download default gitignore (NOT by default)
 -m, --move        move the folder into the Max package folder (NOT by default)
@@ -100,7 +100,7 @@ parse_params() {
     -a | --all) all=1
                 minimum=0
                 default=0 ;;
-    -t | --tiniest) minimum=1
+    -t | --tiny) minimum=1
                     all=0
                     default=0 ;;
     -g | --git) initGit=1 ;;
