@@ -4,13 +4,13 @@
 		"appversion" : 		{
 			"major" : 8,
 			"minor" : 2,
-			"revision" : 1,
+			"revision" : 2,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 330.0, 333.0, 1076.0, 480.0 ],
+		"rect" : [ 100.0, 100.0, 1306.0, 709.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,42 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-9",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 861.0, 520.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-7",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 865.0, 604.0, 176.0, 22.0 ],
+					"text" : "û ä Ñ ÿ Ú Î È Ê å ü"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-2",
+					"maxclass" : "newobj",
+					"numinlets" : 4,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 861.0, 565.0, 180.0, 22.0 ],
+					"text" : "MRrandL 10 200 255 @toascii 1"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-4",
 					"linecount" : 5,
@@ -289,7 +325,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 214.0, 247.0, 148.0, 62.0 ],
+					"patching_rect" : [ 214.0, 247.0, 152.0, 62.0 ],
 					"text" : "0.282375 8.140125 9.984375 -1.396375 1.195 -1.011875 7.394875 8.554 0.47675 8.40725"
 				}
 
@@ -402,6 +438,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-7", 1 ],
+					"source" : [ "obj-2", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-21", 0 ],
 					"source" : [ "obj-20", 0 ]
 				}
@@ -410,7 +453,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-19", 1 ],
-					"order" : 1,
+					"order" : 0,
 					"source" : [ "obj-21", 0 ]
 				}
 
@@ -418,7 +461,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"order" : 0,
+					"order" : 1,
 					"source" : [ "obj-21", 0 ]
 				}
 
@@ -556,18 +599,32 @@
 				}
 
 			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"source" : [ "obj-9", 0 ]
+				}
+
+			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "MRrandL.maxpat",
-				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRrandL",
-				"patcherrelativepath" : ".",
+				"name" : "MRabstractionPrintBP.maxpat",
+				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRabstractionPrint",
+				"patcherrelativepath" : "../MRabstractionPrint",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "MRzlAutoSize.maxpat",
-				"bootpath" : "~/Documents/Music/Max/Max8/SingingBowls/MR_SingingBowls/patchers",
-				"patcherrelativepath" : "../../../Max8/SingingBowls/MR_SingingBowls/patchers",
+				"name" : "MRdelta.maxpat",
+				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRdelta",
+				"patcherrelativepath" : "../MRdelta",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "MRrandL.maxpat",
+				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRrandL",
+				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
 			}
@@ -579,9 +636,9 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "MRdelta.maxpat",
-				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRdelta",
-				"patcherrelativepath" : "../MRdelta",
+				"name" : "MRzlAutoSize.maxpat",
+				"bootpath" : "~/Documents/Music/Max/MRToolboxPackage/patchers/MRzlAutoSize",
+				"patcherrelativepath" : "../MRzlAutoSize",
 				"type" : "JSON",
 				"implicit" : 1
 			}
